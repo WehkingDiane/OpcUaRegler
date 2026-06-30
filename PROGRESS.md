@@ -53,3 +53,10 @@
     - `cmake --build build`
     - `ctest --test-dir build --output-on-failure`
   - Ergebnis: Konfiguration, Build und 1/1 Test erfolgreich.
+  - open62541 in Ubuntu-Paketquellen nicht als `libopen62541-dev` verfuegbar.
+  - open62541 v1.4.17 aus dem offiziellen Repository nach `/tmp/open62541-v1.4.17` geklont, gebaut und nach `/usr/local` installiert.
+  - Backend-Build erfolgreich geprueft:
+    - `cmake -S . -B build -DOPCUAREGLER_WITH_OPEN62541=ON`
+    - `cmake --build build`
+    - `ctest --test-dir build --output-on-failure`
+  - Ergebnis: open62541-Backend kompiliert und 1/1 Test erfolgreich.

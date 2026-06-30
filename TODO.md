@@ -13,6 +13,7 @@
 - [x] Beispielkonfiguration und Betriebsdokumentation erstellt.
 - [x] Tests fuer Reglerlogik und Toleranzbewertung erstellt.
 - [x] Build auf einem System mit CMake und C++20 Compiler ausgefuehrt.
+- [x] open62541 v1.4.17 lokal installiert und Backend-Build mit `OPCUAREGLER_WITH_OPEN62541=ON` erfolgreich ausgefuehrt.
 
 ## In Arbeit
 

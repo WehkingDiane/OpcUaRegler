@@ -1,0 +1,55 @@
+# PROGRESS
+
+## 2026-06-30
+
+- `AGENTS.md` erweitert:
+  - Git- und Commit-Regeln fuer regelmaessige, fokussierte Commits ergaenzt.
+  - Arbeitsablauf fuer groessere Aenderungen dokumentiert.
+  - Build-, Test- und Dokumentationsregeln konkretisiert.
+  - OPC-UA- und EUROMAP-Leitplanken expliziter festgehalten.
+- Projekt gestartet in `C:\Users\diane\Documents\OpcUaRegler`.
+- Benutzerziel: eigenstaendiges C++ Projekt fuer industriellen Arbeitspunkt-Regler als Microservice auf Linux Industrie-PC.
+- Anforderungen:
+  - OPC-UA-Ein-/Ausgangsanbindung
+  - Soll/Ist-Regelung
+  - zwei Toleranzschwellen
+  - Fehlermeldungen und Statusmodell
+  - EUROMAP-83-orientiertes Modell
+  - Fortschritt und Wissen im Repository dokumentieren
+- Offizielle Einordnung recherchiert:
+  - EUROMAP 83 ist identisch mit OPC 40083 Release 1.03 und bildet allgemeine Typdefinitionen fuer OPC-UA-Schnittstellen der Kunststoff- und Gummimaschinen.
+  - Basis-URI fuer General Types: `http://opcfoundation.org/UA/PlasticsRubber/GeneralTypes/`.
+  - Quelle: EUROMAP Uebersicht OPC UA Specifications.
+- Architekturentscheidung:
+  - Eigener Regler-Namespace statt Kopie des EUROMAP NodeSets.
+  - Reglerkern unabhaengig von konkreter OPC-UA-Bibliothek.
+  - Optionales `open62541` Backend fuer echten OPC-UA-Server; Simulationsmodus fuer Build und Tests ohne externe Abhaengigkeiten.
+- Angelegte Projektdateien:
+  - `CMakeLists.txt`
+  - `include/opcuaregler/*.hpp`
+  - `src/*.cpp`
+  - `tests/controller_tests.cpp`
+  - `config/regler.example.toml`
+  - `docs/architecture.md`
+  - `docs/euromap83-model.md`
+  - `docs/operations.md`
+  - `README.md`
+- Implementierter Stand:
+  - `WorkingPointController` mit Soll/Ist-Abweichung, PI-Regelung, Stellwertbegrenzung, Ausgaberampe und Anti-Windup.
+  - Zwei Toleranzschwellen: Warnung und Fehler.
+  - `AlarmManager` fuer aktive, quittierbare Alarme.
+  - `Euromap83WorkingPointModel` mit eigener Node-Struktur und Namespace `urn:opcuaregler:euromap83-working-point-controller`.
+  - `MemoryOpcUaBackend` als Simulationsbackend fuer lokale Tests ohne OPC-UA-SDK.
+  - Optionales `Open62541OpcUaBackend` legt bei `OPCUAREGLER_WITH_OPEN62541=ON` OPC-UA-Nodes an, liest `ActualValue`, `Enable` und `Acknowledge`, publiziert Prozesswerte und Alarme.
+  - `ActualValue` und `QualityGood` sind im eigenen OPC-UA-Modell bewusst schreibbar, damit externe Systeme einfache Input-Anbindung ueber den Microservice-Server nutzen koennen.
+  - `Setpoint`, `ManualMode` und `ManualOutput` sind ueber das Backend lesbar und werden in jedem Zyklus in den Regler uebernommen.
+  - `Identification/ApplicationUri` und `Identification/SemanticBase` dokumentieren Dienst-URI und EUROMAP-83-Semantik im OPC-UA-Adressraum.
+- Verifikation:
+  - `cmake -S . -B build` konnte in dieser Umgebung nicht ausgefuehrt werden, weil `cmake` nicht im PATH vorhanden ist.
+  - `g++`, `clang++` und `cl` sind ebenfalls nicht im PATH vorhanden.
+  - Statische Dateipruefung ausgefuehrt und fehlendes `<cctype>` in `src/config.cpp` korrigiert.
+  - Spaeter in `/home/diane/OpcUaRegler` erneut geprueft:
+    - `cmake -S . -B build`
+    - `cmake --build build`
+    - `ctest --test-dir build --output-on-failure`
+  - Ergebnis: Konfiguration, Build und 1/1 Test erfolgreich.

@@ -21,15 +21,15 @@
 - [x] Prozesssimulation in automatisierten Tests abgedeckt: Normalbewegung, Stoergroesse und negative Zeitdifferenz.
 - [x] Bedienablauf fuer UAExpert dokumentiert: Verbinden, Nodes finden, Werte schreiben, Alarme quittieren.
 - [x] Node-Liste mit Datentypen, Schreibrechten, Defaultwerten und Bedeutung dokumentiert.
+- [x] Schreibrechte der OPC-UA-Variablen in WSL/Linux mit UAExpert manuell bestaetigt.
+- [x] Schreibbare Nodes in UAExpert gegen den WSL-Server geprueft: `ActualValue`, `QualityGood`, `Setpoint`, `Enable`, `ManualMode`, `ManualOutput`, `Acknowledge`.
 
 ## In Arbeit
 
 - [ ] open62541-Server-Implementierung in WSL/Linux weiterentwickeln und mit UAExpert unter Windows testen.
-- [ ] Schreibrechte der OPC-UA-Variablen in WSL/Linux mit UAExpert manuell bestaetigen. [MANUELL: UAExpert unter Windows]
 
 ## Naechste Schritte: Bedienbarkeit und Simulation
 
-- [ ] Schreibbare Nodes in UAExpert gegen den WSL-Server manuell pruefen: `ActualValue`, `QualityGood`, `Setpoint`, `Enable`, `ManualMode`, `ManualOutput`, `Acknowledge`. [MANUELL: UAExpert unter Windows]
 - [ ] Prozesssimulation fachlich erweitern und testen: Sollwertsprung, Warnschwelle, Fehlerschwelle, Sensorfehler.
 - [ ] Bedienablauf und Node-Liste mit UAExpert manuell gegenpruefen. [MANUELL: UAExpert-Screens/Bedienung pruefen]
 

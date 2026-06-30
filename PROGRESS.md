@@ -111,3 +111,5 @@
     - `ctest --test-dir build --output-on-failure`
   - UAExpert-Bedienablauf in `docs/operations.md` konkretisiert.
   - Node-Liste mit Datentypen, Schreibrechten, Defaultwerten und Bedeutung in `docs/euromap83-model.md` ergaenzt.
+  - Manueller UAExpert-Gegentest durch Benutzer bestaetigt: schreibbare Werte lassen sich jetzt bearbeiten.
+  - TODOs fuer OPC-UA-Schreibrechte und schreibbare UAExpert-Nodes als erledigt markiert.

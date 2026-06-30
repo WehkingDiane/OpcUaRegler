@@ -63,3 +63,6 @@
   - `config/regler.open62541.toml` fuer echten OPC-UA-Serverbetrieb mit `simulation = false` ergaenzt.
   - OPC-UA-Server in WSL mit open62541 gestartet; Portcheck bestaetigt Listener auf `0.0.0.0:4840` und `[::]:4840`.
   - WSL-IP fuer UAExpert-Test: `172.18.230.250`; moegliche Endpoint-URL: `opc.tcp://172.18.230.250:4840`.
+  - UAExpert kann den Server erreichen.
+  - Offener Befund: Werte lassen sich in UAExpert aktuell nicht bearbeiten; Schreibrechte/AccessLevel im open62541-Backend muessen geprueft werden.
+  - Neue Aufgaben aufgenommen: Benutzer-/Passwort-Authentifizierung, Zertifikatsbetrieb und bedienbare Prozesssimulation.

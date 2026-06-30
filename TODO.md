@@ -19,9 +19,13 @@
 ## In Arbeit
 
 - [ ] open62541-Server-Implementierung auf Zielsystem bauen und mit OPC-UA-Client testen.
+- [ ] Schreibrechte der OPC-UA-Variablen mit UAExpert pruefen und korrigieren, damit freigegebene Werte bearbeitet werden koennen.
 
 ## Spaeter
 
+- [ ] OPC-UA-Benutzer-/Passwort-Authentifizierung implementieren und Konfigurationsoptionen dokumentieren.
+- [ ] OPC-UA-Zertifikatsbetrieb implementieren und mit UAExpert testen.
+- [ ] Bedienbare Prozesssimulation hinzufuegen, damit Istwert und Reglerverhalten ohne echte Maschine getestet werden koennen.
 - [ ] Vollstaendige open62541-Server-Implementierung mit Zertifikaten testen.
 - [ ] systemd-Unit und Installationspaket erstellen.
 - [ ] Mapping gegen konkrete Maschinen-NodeIds validieren.

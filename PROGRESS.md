@@ -97,3 +97,15 @@
     - `ctest --test-dir build --output-on-failure`
   - Ergebnis: Simulationsbuild und open62541-Build erfolgreich, jeweils 1/1 Test bestanden.
   - Aktualisierter WSL-Server in `tmux` neu gestartet; Port `4840` lauscht wieder auf `0.0.0.0` und `[::]`.
+  - Simulationslogik in `advanceFirstOrderProcess` ausgelagert, damit sie unabhaengig vom OPC-UA-Backend testbar ist.
+  - Automatisierte Tests fuer die Basis-Prozesssimulation ergaenzt:
+    - Bewegung in Richtung Stellwert
+    - Einfluss einer Stoergroesse
+    - robuste Behandlung negativer Zeitdifferenzen
+  - Verifikation nach Refactoring erneut erfolgreich:
+    - `cmake -S . -B build-sim -DOPCUAREGLER_WITH_OPEN62541=OFF`
+    - `cmake --build build-sim`
+    - `ctest --test-dir build-sim --output-on-failure`
+    - `cmake -S . -B build -DOPCUAREGLER_WITH_OPEN62541=ON`
+    - `cmake --build build`
+    - `ctest --test-dir build --output-on-failure`

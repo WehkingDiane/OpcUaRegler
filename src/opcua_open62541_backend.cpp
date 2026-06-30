@@ -1,13 +1,13 @@
 #if defined(OPCUAREGLER_WITH_OPEN62541)
 
 #include "opcuaregler/opcua_backend.hpp"
+#include "opcuaregler/process_simulation.hpp"
 
 #include <open62541/server.h>
 #include <open62541/server_config_default.h>
 
 #include <algorithm>
 #include <chrono>
-#include <cmath>
 #include <stdexcept>
 #include <utility>
 
@@ -363,15 +363,16 @@ void Open62541OpcUaBackend::publish(const ProcessImage& process, const std::vect
         double timeConstantSeconds = 5.0;
         readScalar(impl_->server, "Regler.Simulation.Disturbance", disturbance, UA_TYPES[UA_TYPES_DOUBLE]);
         readScalar(impl_->server, "Regler.Simulation.TimeConstantSeconds", timeConstantSeconds, UA_TYPES[UA_TYPES_DOUBLE]);
-        timeConstantSeconds = std::max(0.1, timeConstantSeconds);
-
         const auto now = std::chrono::steady_clock::now();
-        const auto elapsed = std::chrono::duration<double>(now - impl_->lastSimulationUpdate).count();
+        const auto elapsed = std::chrono::duration<double>(now - impl_->lastSimulationUpdate);
         impl_->lastSimulationUpdate = now;
 
-        const double target = process.outputValue + disturbance;
-        const double alpha = 1.0 - std::exp(-std::max(0.0, elapsed) / timeConstantSeconds);
-        impl_->simulatedActual += (target - impl_->simulatedActual) * alpha;
+        impl_->simulatedActual = advanceFirstOrderProcess(
+            impl_->simulatedActual,
+            process.outputValue,
+            disturbance,
+            timeConstantSeconds,
+            elapsed);
 
         writeDouble(impl_->server, "Regler.Simulation.ActualValue", impl_->simulatedActual);
         writeDouble(impl_->server, "Regler.Process.ActualValue", impl_->simulatedActual);

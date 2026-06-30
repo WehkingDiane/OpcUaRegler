@@ -18,6 +18,7 @@
 - [x] OPC-UA-Schreibrechte im open62541-Backend technisch korrigiert: `AccessLevel` und `UserAccessLevel` werden fuer schreibbare Nodes gesetzt.
 - [x] Bedienbare Basis-Prozesssimulation im OPC-UA-Adressraum unter `Regler/Simulation` ergaenzt.
 - [x] OPC-UA-Testnodes fuer Simulation definiert: simulierter Istwert, Stoergroesse, Streckenzeitkonstante und Reset.
+- [x] Prozesssimulation in automatisierten Tests abgedeckt: Normalbewegung, Stoergroesse und negative Zeitdifferenz.
 
 ## In Arbeit
 
@@ -27,7 +28,7 @@
 ## Naechste Schritte: Bedienbarkeit und Simulation
 
 - [ ] Schreibbare Nodes in UAExpert gegen den WSL-Server manuell pruefen: `ActualValue`, `QualityGood`, `Setpoint`, `Enable`, `ManualMode`, `ManualOutput`, `Acknowledge`. [MANUELL: UAExpert unter Windows]
-- [ ] Prozesssimulation in Tests abdecken: Normalbetrieb, Sollwertsprung, Warnschwelle, Fehlerschwelle, Sensorfehler.
+- [ ] Prozesssimulation fachlich erweitern und testen: Sollwertsprung, Warnschwelle, Fehlerschwelle, Sensorfehler.
 - [ ] Bedienablauf fuer UAExpert dokumentieren: Verbinden, Nodes finden, Werte schreiben, Alarme quittieren. [MANUELL: UAExpert-Screens/Bedienung pruefen]
 
 ## Reglerfunktion fuer Produktion

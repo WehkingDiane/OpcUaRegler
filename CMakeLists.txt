@@ -17,6 +17,7 @@ add_library(opcuaregler_core
     src/controller.cpp
     src/euromap83_model.cpp
     src/opcua_memory_backend.cpp
+    src/process_simulation.cpp
 )
 
 target_include_directories(opcuaregler_core

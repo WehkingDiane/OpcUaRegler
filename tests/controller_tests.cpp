@@ -1,5 +1,6 @@
 #include "opcuaregler/controller.hpp"
 #include "opcuaregler/euromap83_model.hpp"
+#include "opcuaregler/process_simulation.hpp"
 
 #include <cassert>
 #include <chrono>
@@ -77,6 +78,46 @@ void testSimulationNodesAreWritable() {
     assert(isWritable("Regler/Simulation/Reset"));
 }
 
+void testFirstOrderSimulationMovesTowardOutput() {
+    const double next = advanceFirstOrderProcess(
+        0.0,
+        100.0,
+        0.0,
+        5.0,
+        std::chrono::duration<double>{1.0});
+
+    assert(next > 0.0);
+    assert(next < 100.0);
+}
+
+void testFirstOrderSimulationAppliesDisturbance() {
+    const double withoutDisturbance = advanceFirstOrderProcess(
+        50.0,
+        100.0,
+        0.0,
+        5.0,
+        std::chrono::duration<double>{1.0});
+    const double withDisturbance = advanceFirstOrderProcess(
+        50.0,
+        100.0,
+        10.0,
+        5.0,
+        std::chrono::duration<double>{1.0});
+
+    assert(withDisturbance > withoutDisturbance);
+}
+
+void testFirstOrderSimulationIgnoresNegativeElapsedTime() {
+    const double next = advanceFirstOrderProcess(
+        50.0,
+        100.0,
+        0.0,
+        5.0,
+        std::chrono::duration<double>{-1.0});
+
+    assert(std::abs(next - 50.0) < 1e-9);
+}
+
 } // namespace
 
 int main() {
@@ -86,6 +127,9 @@ int main() {
     testDisabled();
     testBadQuality();
     testSimulationNodesAreWritable();
+    testFirstOrderSimulationMovesTowardOutput();
+    testFirstOrderSimulationAppliesDisturbance();
+    testFirstOrderSimulationIgnoresNegativeElapsedTime();
     std::cout << "controller tests passed\n";
     return 0;
 }

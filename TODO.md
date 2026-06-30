@@ -19,6 +19,8 @@
 - [x] Bedienbare Basis-Prozesssimulation im OPC-UA-Adressraum unter `Regler/Simulation` ergaenzt.
 - [x] OPC-UA-Testnodes fuer Simulation definiert: simulierter Istwert, Stoergroesse, Streckenzeitkonstante und Reset.
 - [x] Prozesssimulation in automatisierten Tests abgedeckt: Normalbewegung, Stoergroesse und negative Zeitdifferenz.
+- [x] Bedienablauf fuer UAExpert dokumentiert: Verbinden, Nodes finden, Werte schreiben, Alarme quittieren.
+- [x] Node-Liste mit Datentypen, Schreibrechten, Defaultwerten und Bedeutung dokumentiert.
 
 ## In Arbeit
 
@@ -29,7 +31,7 @@
 
 - [ ] Schreibbare Nodes in UAExpert gegen den WSL-Server manuell pruefen: `ActualValue`, `QualityGood`, `Setpoint`, `Enable`, `ManualMode`, `ManualOutput`, `Acknowledge`. [MANUELL: UAExpert unter Windows]
 - [ ] Prozesssimulation fachlich erweitern und testen: Sollwertsprung, Warnschwelle, Fehlerschwelle, Sensorfehler.
-- [ ] Bedienablauf fuer UAExpert dokumentieren: Verbinden, Nodes finden, Werte schreiben, Alarme quittieren. [MANUELL: UAExpert-Screens/Bedienung pruefen]
+- [ ] Bedienablauf und Node-Liste mit UAExpert manuell gegenpruefen. [MANUELL: UAExpert-Screens/Bedienung pruefen]
 
 ## Reglerfunktion fuer Produktion
 
@@ -57,7 +59,6 @@
 
 - [ ] Maschinen- oder kundenspezifische NodeIds aus Konfiguration laden statt im Code festzulegen.
 - [ ] Statuscodes und Quality-Werte fuer alle relevanten Nodes sauber setzen.
-- [ ] Node-Liste mit Datentypen, Schreibrechten, Defaultwerten und Bedeutung dokumentieren.
 - [ ] EUROMAP-83-/OPC-40083-Bezug weiter nur semantisch referenzieren; keine fremden NodeSets kopieren.
 
 ## Betrieb auf Linux Industrie-PC

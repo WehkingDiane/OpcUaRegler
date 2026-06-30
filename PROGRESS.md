@@ -109,3 +109,5 @@
     - `cmake -S . -B build -DOPCUAREGLER_WITH_OPEN62541=ON`
     - `cmake --build build`
     - `ctest --test-dir build --output-on-failure`
+  - UAExpert-Bedienablauf in `docs/operations.md` konkretisiert.
+  - Node-Liste mit Datentypen, Schreibrechten, Defaultwerten und Bedeutung in `docs/euromap83-model.md` ergaenzt.

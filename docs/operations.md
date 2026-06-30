@@ -44,6 +44,16 @@ Fuer manuelle Tests in UAExpert:
 4. Fuer die interne Simulation `Simulation/Enabled` auf `true` setzen. Danach `Simulation/ActualValue`, `Simulation/Disturbance`, `Simulation/TimeConstantSeconds` und `Simulation/Reset` bedienen.
 5. `Simulation/Reset` setzt den simulierten Istwert auf den aktuellen Sollwert und wird vom Server wieder auf `false` zurueckgesetzt.
 
+Erwartete Beobachtungen:
+
+- `Parameters/Setpoint` kann geschrieben werden und wird danach in `Process/Deviation` beruecksichtigt.
+- `Process/ActualValue` kann geschrieben werden, solange `Simulation/Enabled` auf `false` steht.
+- `Process/QualityGood = false` setzt den Regler in `ERROR`.
+- `Commands/Enable = false` setzt den Regler in `DISABLED`.
+- `Commands/ManualMode = true` uebernimmt `Commands/ManualOutput` als Stellwert.
+- `Commands/Acknowledge = true` wird vom Server wieder auf `false` gesetzt.
+- Bei `Simulation/Enabled = true` bewegt sich `Simulation/ActualValue` in Richtung `Process/OutputValue + Simulation/Disturbance`.
+
 ## Start im Simulationsmodus
 
 ```sh

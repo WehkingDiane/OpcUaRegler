@@ -1,0 +1,18 @@
+[service]
+simulation = false
+
+[opcua]
+bind_address = "0.0.0.0"
+port = 4840
+application_uri = "urn:opcuaregler:working-point-controller"
+
+[controller]
+setpoint = 100.0
+tolerance_warning = 2.0
+tolerance_error = 5.0
+kp = 1.2
+ki = 0.05
+output_min = 0.0
+output_max = 100.0
+max_output_change_per_second = 10.0
+cycle_time_ms = 500

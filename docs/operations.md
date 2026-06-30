@@ -26,6 +26,14 @@ simulation = false
 
 Der Dienst startet dann einen OPC-UA-Server auf dem konfigurierten Port. Im Simulationsmodus wird kein echter OPC-UA-Server geoeffnet.
 
+Fuer lokale Tests mit UAExpert kann die vorbereitete Serverkonfiguration genutzt werden:
+
+```sh
+./build/opcuaregler --config config/regler.open62541.toml
+```
+
+Unter WSL ist der Server fuer UAExpert in Windows typischerweise ueber `opc.tcp://localhost:4840` oder ueber die WSL-IP erreichbar, zum Beispiel `opc.tcp://172.x.x.x:4840`.
+
 ## Start im Simulationsmodus
 
 ```sh

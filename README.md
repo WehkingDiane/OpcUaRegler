@@ -36,6 +36,14 @@ cmake --build build
 
 In der Konfiguration `simulation = false` setzen. Dann stellt der Dienst die Regler-Nodes ueber OPC UA bereit.
 
+Eine fertige lokale Serverkonfiguration liegt in `config/regler.open62541.toml`:
+
+```sh
+./build/opcuaregler --config config/regler.open62541.toml
+```
+
+UAExpert kann den Server lokal ueber `opc.tcp://localhost:4840` oder, aus Windows gegen WSL, ueber die WSL-IP erreichen.
+
 ## Wichtige Dateien
 
 - `AGENTS.md`: Arbeitsregeln fuer weitere Codex-Sitzungen
@@ -43,4 +51,5 @@ In der Konfiguration `simulation = false` setzen. Dann stellt der Dienst die Reg
 - `PROGRESS.md`: persistenter Fortschritts- und Wissensstand
 - `docs/architecture.md`: Architektur
 - `docs/euromap83-model.md`: EUROMAP-83-orientiertes Modell
-- `config/regler.example.toml`: Beispielkonfiguration
+- `config/regler.example.toml`: Beispielkonfiguration fuer Simulationsmodus
+- `config/regler.open62541.toml`: Beispielkonfiguration fuer echten OPC-UA-Server

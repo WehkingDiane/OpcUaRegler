@@ -60,3 +60,6 @@
     - `cmake --build build`
     - `ctest --test-dir build --output-on-failure`
   - Ergebnis: open62541-Backend kompiliert und 1/1 Test erfolgreich.
+  - `config/regler.open62541.toml` fuer echten OPC-UA-Serverbetrieb mit `simulation = false` ergaenzt.
+  - OPC-UA-Server in WSL mit open62541 gestartet; Portcheck bestaetigt Listener auf `0.0.0.0:4840` und `[::]:4840`.
+  - WSL-IP fuer UAExpert-Test: `172.18.230.250`; moegliche Endpoint-URL: `opc.tcp://172.18.230.250:4840`.

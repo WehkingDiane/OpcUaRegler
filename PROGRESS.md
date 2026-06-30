@@ -66,3 +66,13 @@
   - UAExpert kann den Server erreichen.
   - Offener Befund: Werte lassen sich in UAExpert aktuell nicht bearbeiten; Schreibrechte/AccessLevel im open62541-Backend muessen geprueft werden.
   - Neue Aufgaben aufgenommen: Benutzer-/Passwort-Authentifizierung, Zertifikatsbetrieb und bedienbare Prozesssimulation.
+  - `TODO.md` fuer Produktionsreife neu strukturiert:
+    - Bedienbarkeit und Simulation
+    - Reglerfunktion fuer Produktion
+    - OPC-UA Security und Rechte
+    - OPC-UA Modell und Maschinenintegration
+    - Betrieb auf Linux Industrie-PC
+    - Persistenz und Diagnose
+    - Safety und Abgrenzung
+    - Dokumentation und Release
+  - Aufgaben mit notwendiger manueller Pruefung durch den Benutzer mit `[MANUELL: ...]` markiert.

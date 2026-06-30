@@ -76,3 +76,7 @@
     - Safety und Abgrenzung
     - Dokumentation und Release
   - Aufgaben mit notwendiger manueller Pruefung durch den Benutzer mit `[MANUELL: ...]` markiert.
+  - Teststrategie konkretisiert:
+    - Laufende Entwicklung und Tests erfolgen in WSL/Linux.
+    - UAExpert-Pruefungen erfolgen manuell unter Windows gegen den WSL-Server.
+    - Tests auf dem tatsaechlichen Industrie-PC und an realer Maschine/SPS sind als Abschluss-Gate am Projektende eingeplant.

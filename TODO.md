@@ -18,14 +18,14 @@
 
 ## In Arbeit
 
-- [ ] open62541-Server-Implementierung auf Zielsystem bauen und mit OPC-UA-Client testen.
-- [ ] Schreibrechte der OPC-UA-Variablen mit UAExpert pruefen und korrigieren, damit freigegebene Werte bearbeitet werden koennen.
+- [ ] open62541-Server-Implementierung in WSL/Linux weiterentwickeln und mit UAExpert unter Windows testen.
+- [ ] Schreibrechte der OPC-UA-Variablen in WSL/Linux mit UAExpert pruefen und korrigieren, damit freigegebene Werte bearbeitet werden koennen. [MANUELL: UAExpert unter Windows]
 
 ## Naechste Schritte: Bedienbarkeit und Simulation
 
 - [ ] Bedienbare Prozesssimulation hinzufuegen, damit Istwert und Reglerverhalten ohne echte Maschine getestet werden koennen.
 - [ ] OPC-UA-Testnodes fuer Simulation definieren, z. B. simulierter Istwert, Stoergroesse, Streckenzeitkonstante und Reset.
-- [ ] Schreibbare Nodes in UAExpert manuell pruefen: `ActualValue`, `QualityGood`, `Setpoint`, `Enable`, `ManualMode`, `ManualOutput`, `Acknowledge`. [MANUELL: UAExpert]
+- [ ] Schreibbare Nodes in UAExpert gegen den WSL-Server manuell pruefen: `ActualValue`, `QualityGood`, `Setpoint`, `Enable`, `ManualMode`, `ManualOutput`, `Acknowledge`. [MANUELL: UAExpert unter Windows]
 - [ ] Prozesssimulation in Tests abdecken: Normalbetrieb, Sollwertsprung, Warnschwelle, Fehlerschwelle, Sensorfehler.
 - [ ] Bedienablauf fuer UAExpert dokumentieren: Verbinden, Nodes finden, Werte schreiben, Alarme quittieren. [MANUELL: UAExpert-Screens/Bedienung pruefen]
 
@@ -53,12 +53,10 @@
 
 ## OPC-UA Modell und Maschinenintegration
 
-- [ ] Mapping gegen konkrete Maschinen-NodeIds validieren.
 - [ ] Maschinen- oder kundenspezifische NodeIds aus Konfiguration laden statt im Code festzulegen.
 - [ ] Statuscodes und Quality-Werte fuer alle relevanten Nodes sauber setzen.
 - [ ] Node-Liste mit Datentypen, Schreibrechten, Defaultwerten und Bedeutung dokumentieren.
 - [ ] EUROMAP-83-/OPC-40083-Bezug weiter nur semantisch referenzieren; keine fremden NodeSets kopieren.
-- [ ] Mapping mit einer realen Maschine oder SPS testen. [MANUELL: Zielmaschine/SPS]
 
 ## Betrieb auf Linux Industrie-PC
 
@@ -67,8 +65,7 @@
 - [ ] Logging nach journald oder Datei inklusive Logrotation definieren.
 - [ ] Version, Build-Info und Git-Commit im OPC-UA-Adressraum anzeigen.
 - [ ] Ressourcenlimits fuer CPU, Speicher und Dateizugriffe definieren.
-- [ ] Zykluszeit und Jitter auf Zielhardware messen. [MANUELL: Industrie-PC]
-- [ ] Neustartverhalten bei Fehlern und Stromausfall auf Zielhardware testen. [MANUELL: Industrie-PC]
+- [ ] Alle betrieblichen Funktionen zunaechst in WSL/Linux vorbereiten; echter IPC-Test erfolgt erst am Projektende.
 
 ## Persistenz und Diagnose
 
@@ -82,10 +79,18 @@
 - [ ] Safety-relevante Signale und Abschaltungen als externe SPS-/Safety-Funktion abgrenzen.
 - [ ] Verhalten bei Not-Aus, Maschinenfreigabeverlust und Kommunikationsverlust dokumentieren. [MANUELL: Anlagenkonzept pruefen]
 
+## Abschluss-Gate: Industrie-PC und reale Anlage
+
+- [ ] open62541-Server-Implementierung auf dem Industrie-PC bauen und starten. [MANUELL: IPC am Projektende]
+- [ ] Zykluszeit und Jitter auf Zielhardware messen. [MANUELL: IPC am Projektende]
+- [ ] Neustartverhalten bei Fehlern und Stromausfall auf Zielhardware testen. [MANUELL: IPC am Projektende]
+- [ ] Mapping gegen konkrete Maschinen-NodeIds validieren. [MANUELL: Zielmaschine/SPS am Projektende]
+- [ ] Mapping mit einer realen Maschine oder SPS testen. [MANUELL: Zielmaschine/SPS am Projektende]
+- [ ] Vollstaendige open62541-Server-Implementierung mit Zertifikaten auf Zielumgebung testen. [MANUELL: IPC/UAExpert am Projektende]
+
 ## Dokumentation und Release
 
 - [ ] Konfigurationsreferenz fuer alle Optionen erstellen.
 - [ ] Installationsanleitung fuer WSL-Test, Linux-IPC und open62541-Abhaengigkeit erstellen.
 - [ ] Security-Hardening-Anleitung erstellen.
 - [ ] Release-Checkliste erstellen: Build, Tests, UAExpert-Test, Zielhardware-Test, Security-Konfiguration.
-- [ ] Vollstaendige open62541-Server-Implementierung mit Zertifikaten testen. [MANUELL: UAExpert und Zielumgebung]

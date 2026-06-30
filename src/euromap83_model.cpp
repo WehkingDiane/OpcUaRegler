@@ -35,6 +35,11 @@ std::vector<NodeDefinition> Euromap83WorkingPointModel::nodes() const {
         {"Regler/Commands/Acknowledge", "Acknowledge", "Boolean", "Acknowledge active alarms", true},
         {"Regler/Commands/ManualMode", "ManualMode", "Boolean", "Switch controller to manual mode", true},
         {"Regler/Commands/ManualOutput", "ManualOutput", "Double", "Manual manipulated value", true},
+        {"Regler/Simulation/Enabled", "Enabled", "Boolean", "Enable internal process simulation", true},
+        {"Regler/Simulation/ActualValue", "ActualValue", "Double", "Current simulated process value", true},
+        {"Regler/Simulation/Disturbance", "Disturbance", "Double", "Additive simulation disturbance", true},
+        {"Regler/Simulation/TimeConstantSeconds", "TimeConstantSeconds", "Double", "First-order process time constant", true},
+        {"Regler/Simulation/Reset", "Reset", "Boolean", "Reset simulated process value to setpoint", true},
     };
 }
 

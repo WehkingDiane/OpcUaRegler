@@ -15,16 +15,17 @@
 - [x] Build auf einem System mit CMake und C++20 Compiler ausgefuehrt.
 - [x] open62541 v1.4.17 lokal installiert und Backend-Build mit `OPCUAREGLER_WITH_OPEN62541=ON` erfolgreich ausgefuehrt.
 - [x] Lokale open62541-Serverkonfiguration fuer UAExpert-Test ergaenzt.
+- [x] OPC-UA-Schreibrechte im open62541-Backend technisch korrigiert: `AccessLevel` und `UserAccessLevel` werden fuer schreibbare Nodes gesetzt.
+- [x] Bedienbare Basis-Prozesssimulation im OPC-UA-Adressraum unter `Regler/Simulation` ergaenzt.
+- [x] OPC-UA-Testnodes fuer Simulation definiert: simulierter Istwert, Stoergroesse, Streckenzeitkonstante und Reset.
 
 ## In Arbeit
 
 - [ ] open62541-Server-Implementierung in WSL/Linux weiterentwickeln und mit UAExpert unter Windows testen.
-- [ ] Schreibrechte der OPC-UA-Variablen in WSL/Linux mit UAExpert pruefen und korrigieren, damit freigegebene Werte bearbeitet werden koennen. [MANUELL: UAExpert unter Windows]
+- [ ] Schreibrechte der OPC-UA-Variablen in WSL/Linux mit UAExpert manuell bestaetigen. [MANUELL: UAExpert unter Windows]
 
 ## Naechste Schritte: Bedienbarkeit und Simulation
 
-- [ ] Bedienbare Prozesssimulation hinzufuegen, damit Istwert und Reglerverhalten ohne echte Maschine getestet werden koennen.
-- [ ] OPC-UA-Testnodes fuer Simulation definieren, z. B. simulierter Istwert, Stoergroesse, Streckenzeitkonstante und Reset.
 - [ ] Schreibbare Nodes in UAExpert gegen den WSL-Server manuell pruefen: `ActualValue`, `QualityGood`, `Setpoint`, `Enable`, `ManualMode`, `ManualOutput`, `Acknowledge`. [MANUELL: UAExpert unter Windows]
 - [ ] Prozesssimulation in Tests abdecken: Normalbetrieb, Sollwertsprung, Warnschwelle, Fehlerschwelle, Sensorfehler.
 - [ ] Bedienablauf fuer UAExpert dokumentieren: Verbinden, Nodes finden, Werte schreiben, Alarme quittieren. [MANUELL: UAExpert-Screens/Bedienung pruefen]

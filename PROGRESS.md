@@ -80,3 +80,20 @@
     - Laufende Entwicklung und Tests erfolgen in WSL/Linux.
     - UAExpert-Pruefungen erfolgen manuell unter Windows gegen den WSL-Server.
     - Tests auf dem tatsaechlichen Industrie-PC und an realer Maschine/SPS sind als Abschluss-Gate am Projektende eingeplant.
+  - OPC-UA-Schreibrechte technisch korrigiert:
+    - open62541-Nodes setzen nun neben `AccessLevel` auch `UserAccessLevel`.
+    - Der manuelle UAExpert-Gegentest bleibt erforderlich.
+  - Bedienbare Basis-Prozesssimulation fuer den open62541-Server implementiert:
+    - Neuer Bereich `Regler/Simulation`.
+    - Schreibbare Nodes: `Enabled`, `ActualValue`, `Disturbance`, `TimeConstantSeconds`, `Reset`.
+    - Bei aktivierter Simulation wird `Process/ActualValue` aus einer einfachen Strecke erster Ordnung gespeist.
+  - Dokumentation fuer UAExpert-Test und Simulationsnodes in `README.md`, `docs/operations.md` und `docs/euromap83-model.md` aktualisiert.
+  - Verifikation:
+    - `cmake -S . -B build-sim -DOPCUAREGLER_WITH_OPEN62541=OFF`
+    - `cmake --build build-sim`
+    - `ctest --test-dir build-sim --output-on-failure`
+    - `cmake -S . -B build -DOPCUAREGLER_WITH_OPEN62541=ON`
+    - `cmake --build build`
+    - `ctest --test-dir build --output-on-failure`
+  - Ergebnis: Simulationsbuild und open62541-Build erfolgreich, jeweils 1/1 Test bestanden.
+  - Aktualisierter WSL-Server in `tmux` neu gestartet; Port `4840` lauscht wieder auf `0.0.0.0` und `[::]`.

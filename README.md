@@ -44,6 +44,8 @@ Eine fertige lokale Serverkonfiguration liegt in `config/regler.open62541.toml`:
 
 UAExpert kann den Server lokal ueber `opc.tcp://localhost:4840` oder, aus Windows gegen WSL, ueber die WSL-IP erreichen.
 
+Fuer lokale UAExpert-Tests gibt es zusaetzlich den OPC-UA-Bereich `Regler/Simulation`. `Simulation/Enabled` schaltet eine einfache interne Prozesssimulation ein; ohne Simulation kann `Process/ActualValue` direkt geschrieben werden.
+
 ## Wichtige Dateien
 
 - `AGENTS.md`: Arbeitsregeln fuer weitere Codex-Sitzungen

@@ -6,6 +6,8 @@
 #include <open62541/server_config_default.h>
 
 #include <algorithm>
+#include <chrono>
+#include <cmath>
 #include <stdexcept>
 #include <utility>
 
@@ -28,6 +30,10 @@ void clearAllocated(UA_NodeId& id, UA_QualifiedName& name, UA_LocalizedText& dis
     UA_NodeId_clear(&id);
     UA_QualifiedName_clear(&name);
     UA_LocalizedText_clear(&displayName);
+}
+
+UA_Byte accessLevel(bool writable) {
+    return static_cast<UA_Byte>(UA_ACCESSLEVELMASK_READ | (writable ? UA_ACCESSLEVELMASK_WRITE : 0));
 }
 
 void addFolder(UA_Server* server, const char* id, const char* browseName, const UA_NodeId& parent) {
@@ -58,7 +64,8 @@ void addDouble(UA_Server* server, const char* id, const char* browseName, const 
     UA_VariableAttributes attr = UA_VariableAttributes_default;
     UA_Variant_setScalar(&attr.value, &value, &UA_TYPES[UA_TYPES_DOUBLE]);
     attr.displayName = text(browseName);
-    attr.accessLevel = UA_ACCESSLEVELMASK_READ | (writable ? UA_ACCESSLEVELMASK_WRITE : 0);
+    attr.accessLevel = accessLevel(writable);
+    attr.userAccessLevel = attr.accessLevel;
 
     auto variableId = nodeId(id);
     auto qualified = qname(browseName);
@@ -85,7 +92,8 @@ void addBool(UA_Server* server, const char* id, const char* browseName, const UA
     UA_VariableAttributes attr = UA_VariableAttributes_default;
     UA_Variant_setScalar(&attr.value, &uaValue, &UA_TYPES[UA_TYPES_BOOLEAN]);
     attr.displayName = text(browseName);
-    attr.accessLevel = UA_ACCESSLEVELMASK_READ | (writable ? UA_ACCESSLEVELMASK_WRITE : 0);
+    attr.accessLevel = accessLevel(writable);
+    attr.userAccessLevel = attr.accessLevel;
 
     auto variableId = nodeId(id);
     auto qualified = qname(browseName);
@@ -112,7 +120,8 @@ void addInt32(UA_Server* server, const char* id, const char* browseName, const U
     UA_VariableAttributes attr = UA_VariableAttributes_default;
     UA_Variant_setScalar(&attr.value, &uaValue, &UA_TYPES[UA_TYPES_INT32]);
     attr.displayName = text(browseName);
-    attr.accessLevel = UA_ACCESSLEVELMASK_READ | (writable ? UA_ACCESSLEVELMASK_WRITE : 0);
+    attr.accessLevel = accessLevel(writable);
+    attr.userAccessLevel = attr.accessLevel;
 
     auto variableId = nodeId(id);
     auto qualified = qname(browseName);
@@ -139,7 +148,8 @@ void addString(UA_Server* server, const char* id, const char* browseName, const 
     UA_VariableAttributes attr = UA_VariableAttributes_default;
     UA_Variant_setScalar(&attr.value, &uaValue, &UA_TYPES[UA_TYPES_STRING]);
     attr.displayName = text(browseName);
-    attr.accessLevel = UA_ACCESSLEVELMASK_READ | (writable ? UA_ACCESSLEVELMASK_WRITE : 0);
+    attr.accessLevel = accessLevel(writable);
+    attr.userAccessLevel = attr.accessLevel;
 
     auto variableId = nodeId(id);
     auto qualified = qname(browseName);
@@ -230,6 +240,9 @@ struct Open62541OpcUaBackend::Impl {
     std::uint16_t port{};
     std::string applicationUri;
     bool running{false};
+    bool simulationEnabled{false};
+    double simulatedActual{100.0};
+    std::chrono::steady_clock::time_point lastSimulationUpdate{std::chrono::steady_clock::now()};
 };
 
 Open62541OpcUaBackend::Open62541OpcUaBackend(std::uint16_t port, std::string applicationUri)
@@ -264,12 +277,14 @@ void Open62541OpcUaBackend::start(const Euromap83WorkingPointModel& model) {
     addFolder(impl_->server, "Regler.Process", "Process", regler);
     addFolder(impl_->server, "Regler.Alarms", "Alarms", regler);
     addFolder(impl_->server, "Regler.Commands", "Commands", regler);
+    addFolder(impl_->server, "Regler.Simulation", "Simulation", regler);
 
     auto identification = nodeId("Regler.Identification");
     auto parameters = nodeId("Regler.Parameters");
     auto process = nodeId("Regler.Process");
     auto alarms = nodeId("Regler.Alarms");
     auto commands = nodeId("Regler.Commands");
+    auto simulation = nodeId("Regler.Simulation");
 
     addString(impl_->server, "Regler.Identification.ApplicationUri", "ApplicationUri", identification, impl_->applicationUri.c_str(), false);
     addString(impl_->server, "Regler.Identification.SemanticBase", "SemanticBase", identification, model.euromapGeneralTypesUri().c_str(), false);
@@ -293,7 +308,13 @@ void Open62541OpcUaBackend::start(const Euromap83WorkingPointModel& model) {
     addBool(impl_->server, "Regler.Commands.Acknowledge", "Acknowledge", commands, false, true);
     addBool(impl_->server, "Regler.Commands.ManualMode", "ManualMode", commands, false, true);
     addDouble(impl_->server, "Regler.Commands.ManualOutput", "ManualOutput", commands, 0.0, true);
+    addBool(impl_->server, "Regler.Simulation.Enabled", "Enabled", simulation, false, true);
+    addDouble(impl_->server, "Regler.Simulation.ActualValue", "ActualValue", simulation, 100.0, true);
+    addDouble(impl_->server, "Regler.Simulation.Disturbance", "Disturbance", simulation, 0.0, true);
+    addDouble(impl_->server, "Regler.Simulation.TimeConstantSeconds", "TimeConstantSeconds", simulation, 5.0, true);
+    addBool(impl_->server, "Regler.Simulation.Reset", "Reset", simulation, false, true);
 
+    UA_NodeId_clear(&simulation);
     UA_NodeId_clear(&commands);
     UA_NodeId_clear(&alarms);
     UA_NodeId_clear(&process);
@@ -307,6 +328,7 @@ void Open62541OpcUaBackend::start(const Euromap83WorkingPointModel& model) {
     }
 
     impl_->running = true;
+    impl_->lastSimulationUpdate = std::chrono::steady_clock::now();
 }
 
 void Open62541OpcUaBackend::stop() {
@@ -324,6 +346,39 @@ void Open62541OpcUaBackend::stop() {
 }
 
 void Open62541OpcUaBackend::publish(const ProcessImage& process, const std::vector<Alarm>& alarms) {
+    UA_Boolean simulationEnabled = false;
+    readScalar(impl_->server, "Regler.Simulation.Enabled", simulationEnabled, UA_TYPES[UA_TYPES_BOOLEAN]);
+    impl_->simulationEnabled = simulationEnabled;
+
+    if (impl_->simulationEnabled) {
+        UA_Boolean reset = false;
+        if (readScalar(impl_->server, "Regler.Simulation.Reset", reset, UA_TYPES[UA_TYPES_BOOLEAN]) && reset) {
+            impl_->simulatedActual = process.setpoint;
+            writeBool(impl_->server, "Regler.Simulation.Reset", false);
+        } else {
+            readScalar(impl_->server, "Regler.Simulation.ActualValue", impl_->simulatedActual, UA_TYPES[UA_TYPES_DOUBLE]);
+        }
+
+        double disturbance = 0.0;
+        double timeConstantSeconds = 5.0;
+        readScalar(impl_->server, "Regler.Simulation.Disturbance", disturbance, UA_TYPES[UA_TYPES_DOUBLE]);
+        readScalar(impl_->server, "Regler.Simulation.TimeConstantSeconds", timeConstantSeconds, UA_TYPES[UA_TYPES_DOUBLE]);
+        timeConstantSeconds = std::max(0.1, timeConstantSeconds);
+
+        const auto now = std::chrono::steady_clock::now();
+        const auto elapsed = std::chrono::duration<double>(now - impl_->lastSimulationUpdate).count();
+        impl_->lastSimulationUpdate = now;
+
+        const double target = process.outputValue + disturbance;
+        const double alpha = 1.0 - std::exp(-std::max(0.0, elapsed) / timeConstantSeconds);
+        impl_->simulatedActual += (target - impl_->simulatedActual) * alpha;
+
+        writeDouble(impl_->server, "Regler.Simulation.ActualValue", impl_->simulatedActual);
+        writeDouble(impl_->server, "Regler.Process.ActualValue", impl_->simulatedActual);
+    } else {
+        impl_->lastSimulationUpdate = std::chrono::steady_clock::now();
+    }
+
     writeDouble(impl_->server, "Regler.Parameters.Setpoint", process.setpoint);
     writeDouble(impl_->server, "Regler.Process.Deviation", process.deviation);
     writeDouble(impl_->server, "Regler.Process.OutputValue", process.outputValue);
@@ -346,6 +401,12 @@ void Open62541OpcUaBackend::publish(const ProcessImage& process, const std::vect
 
 double Open62541OpcUaBackend::readActualValue() {
     double value = 0.0;
+    UA_Boolean simulationEnabled = false;
+    if (readScalar(impl_->server, "Regler.Simulation.Enabled", simulationEnabled, UA_TYPES[UA_TYPES_BOOLEAN]) && simulationEnabled) {
+        readScalar(impl_->server, "Regler.Simulation.ActualValue", value, UA_TYPES[UA_TYPES_DOUBLE]);
+        return value;
+    }
+
     readScalar(impl_->server, "Regler.Process.ActualValue", value, UA_TYPES[UA_TYPES_DOUBLE]);
     return value;
 }

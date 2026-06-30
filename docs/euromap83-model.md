@@ -51,6 +51,47 @@ Regler
     `-- ManualOutput
 ```
 
+Der open62541-Server ergaenzt fuer lokale Tests zusaetzlich:
+
+```text
+Regler
+`-- Simulation
+    |-- Enabled
+    |-- ActualValue
+    |-- Disturbance
+    |-- TimeConstantSeconds
+    `-- Reset
+```
+
+## Schreibbare Werte
+
+- `Parameters/Setpoint`
+- `Parameters/ToleranceWarning`
+- `Parameters/ToleranceError`
+- `Parameters/Kp`
+- `Parameters/Ki`
+- `Parameters/OutputMin`
+- `Parameters/OutputMax`
+- `Process/ActualValue`
+- `Process/QualityGood`
+- `Commands/Enable`
+- `Commands/Acknowledge`
+- `Commands/ManualMode`
+- `Commands/ManualOutput`
+- `Simulation/Enabled`
+- `Simulation/ActualValue`
+- `Simulation/Disturbance`
+- `Simulation/TimeConstantSeconds`
+- `Simulation/Reset`
+
+Schreibbare Prozesswerte sind bewusst fuer Tests, Simulation und einfache Adapter vorgesehen. In einer produktiven Anlage sollte die Schreibbarkeit ueber Benutzerrechte und Maschinenmapping eingeschraenkt werden.
+
+## Simulation
+
+Der Bereich `Simulation` stellt eine einfache interne Prozesssimulation fuer lokale WSL-/UAExpert-Tests bereit. Standardmaessig ist `Simulation/Enabled` aus, damit `Process/ActualValue` direkt von UAExpert oder einem externen Adapter geschrieben werden kann.
+
+Wenn `Simulation/Enabled` aktiv ist, berechnet der Server `Simulation/ActualValue` als einfache Strecke erster Ordnung aus `Process/OutputValue`, `Simulation/Disturbance` und `Simulation/TimeConstantSeconds`. Der simulierte Wert wird nach `Process/ActualValue` uebernommen und vom Regler im naechsten Zyklus gelesen. Mit `Simulation/Reset` wird der simulierte Istwert auf den aktuellen Sollwert gesetzt.
+
 ## Mapping-Regeln fuer reale Anlagen
 
 - Istwerte sollten aus dem passenden Maschinen- oder Peripherie-OPC-UA-Server gelesen werden.

@@ -1,9 +1,11 @@
 #include "opcuaregler/controller.hpp"
+#include "opcuaregler/euromap83_model.hpp"
 
 #include <cassert>
 #include <chrono>
 #include <cmath>
 #include <iostream>
+#include <string>
 
 using namespace opcuaregler;
 
@@ -55,6 +57,26 @@ void testBadQuality() {
     assert(result.process.state == ControllerState::Error);
 }
 
+void testSimulationNodesAreWritable() {
+    Euromap83WorkingPointModel model;
+    const auto nodes = model.nodes();
+
+    const auto isWritable = [&nodes](const std::string& path) {
+        for (const auto& node : nodes) {
+            if (node.path == path) {
+                return node.writable;
+            }
+        }
+        return false;
+    };
+
+    assert(isWritable("Regler/Simulation/Enabled"));
+    assert(isWritable("Regler/Simulation/ActualValue"));
+    assert(isWritable("Regler/Simulation/Disturbance"));
+    assert(isWritable("Regler/Simulation/TimeConstantSeconds"));
+    assert(isWritable("Regler/Simulation/Reset"));
+}
+
 } // namespace
 
 int main() {
@@ -63,7 +85,7 @@ int main() {
     testErrorTolerance();
     testDisabled();
     testBadQuality();
+    testSimulationNodesAreWritable();
     std::cout << "controller tests passed\n";
     return 0;
 }
-

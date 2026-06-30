@@ -34,6 +34,16 @@ Fuer lokale Tests mit UAExpert kann die vorbereitete Serverkonfiguration genutzt
 
 Unter WSL ist der Server fuer UAExpert in Windows typischerweise ueber `opc.tcp://localhost:4840` oder ueber die WSL-IP erreichbar, zum Beispiel `opc.tcp://172.x.x.x:4840`.
 
+### UAExpert-Test in WSL/Windows
+
+Fuer manuelle Tests in UAExpert:
+
+1. Mit `opc.tcp://localhost:4840` oder der WSL-IP verbinden.
+2. Unter `Objects/Regler` die Bereiche `Parameters`, `Process`, `Commands`, `Alarms` und `Simulation` pruefen.
+3. Ohne Simulation koennen `Process/ActualValue`, `Process/QualityGood`, `Parameters/Setpoint` und die Werte unter `Commands` geschrieben werden.
+4. Fuer die interne Simulation `Simulation/Enabled` auf `true` setzen. Danach `Simulation/ActualValue`, `Simulation/Disturbance`, `Simulation/TimeConstantSeconds` und `Simulation/Reset` bedienen.
+5. `Simulation/Reset` setzt den simulierten Istwert auf den aktuellen Sollwert und wird vom Server wieder auf `false` zurueckgesetzt.
+
 ## Start im Simulationsmodus
 
 ```sh
